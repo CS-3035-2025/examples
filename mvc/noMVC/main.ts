@@ -28,16 +28,14 @@ panel.layoutMethod = new Layout.WrapRowLayout();
 
 // Create a top and bottom panel. Top panel contains random squares
 // Bottom contains the randomize button
-const topPanel = new SKContainer({ height: panelHeight/1.25, width:panelWidth });
+const topPanel = new SKContainer({ height: panelHeight * 0.80, width:panelWidth });
 topPanel.layoutMethod = new Layout.WrapRowLayout();
-const bottomPanel = new SKContainer({ height: panelHeight/5, width:panelWidth });
+const bottomPanel = new SKContainer({ height: panelHeight * 0.20, width:panelWidth });
 bottomPanel.layoutMethod = new Layout.CentredLayout();
 bottomPanel.fill = "lightblue";
 
-
 // Create the button
 const randomButton = new SKButton({text:"0"});
-
 
 // Add the event listener
 // Creates a random number of square containers
@@ -47,7 +45,7 @@ randomButton.addEventListener("action", () => {
     topPanel.clearChildren();
     let randomNumber = Math.floor(Math.random()*16) + 1
     for (let i = 0; i < randomNumber; i++){
-        const square = new SKLabel({width:panelWidth/4, height: panelWidth/4, text: (i+1).toString()});
+        const square = new SKLabel({width: panelWidth/4, height: panelWidth/4, text: (i+1).toString()});
         square.fill = `hsl(${Math.random() * 360} 100% 50%)`;
         topPanel.addChild(square);
     }

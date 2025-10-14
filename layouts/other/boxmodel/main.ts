@@ -10,7 +10,7 @@ import {
 
 const root = new SKContainer();
 root.id = "ROOT";
-root.fill = "white";
+root.fill = "green";
 root.debug = true;
 root.padding = 10;
 console.log(`root: ${root.debug}`);
@@ -23,6 +23,7 @@ a.fill = "lightgrey";
 // for debug only
 a.debug = true;
 a.id = "A";
+
 root.addChild(a);
 
 setSKRoot(root);
@@ -30,5 +31,5 @@ setSKRoot(root);
 startSimpleKit();
 
 //console.log(a.intrinsicWidth, a.intrinsicHeight);
-console.log(a.layoutWidth, a.layoutHeight);
+//console.log(a.layoutWidth, a.layoutHeight);
 

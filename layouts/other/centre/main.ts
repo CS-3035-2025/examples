@@ -16,6 +16,8 @@ function makeContainer(id: string, fill: string): SKContainer {
 
 const root = makeContainer("root", "lightyellow");
 root.padding = 10;
+// root.width = 10;
+// root.height = 10;
 // root.debug = true;
 
 const a = makeContainer("A", "lightblue");

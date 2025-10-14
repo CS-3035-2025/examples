@@ -23,7 +23,7 @@ const a = makeContainer("A", "lightblue");
 a.padding = 10;
 a.width = 100;
 a.height = 100;
-// a.fillWidth = 1;
+a.fillWidth = 0;
 a.debug = true;
 
 root.addChild(a);
@@ -43,8 +43,8 @@ const c = makeContainer("C", "lightgreen");
 c.padding = 10;
 c.width = 100;
 c.height = 100;
-// c.fillWidth = 1;
-// c.fillHeight = 1;
+c.fillWidth = 1;
+c.fillHeight = 1;
 c.debug = true;
 
 root.addChild(c);
