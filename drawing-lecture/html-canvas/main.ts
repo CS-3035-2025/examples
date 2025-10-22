@@ -10,8 +10,11 @@ function draw() {
   const gc = canvas.getContext("2d");
   if (!gc) return;
 
+  gc.fillStyle = "white";
+
   // draw something
-  gc.fillRect(10, 10, 50, 50);
+  gc.strokeRect(12, 12, 47, 47);
+
 }
 
 draw();

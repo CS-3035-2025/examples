@@ -128,6 +128,9 @@ function textDemo(gc: CanvasRenderingContext2D) {
   gc.fillStyle = "red";
   gc.fillRect(x - 2, y - 2, 4, 4);
 }
+//#endregion
+
+//#region colourDemo
 
 function colourDemo(gc: CanvasRenderingContext2D) {
   for (let i = 0; i < 10; i++) {
@@ -173,11 +176,11 @@ function saveStateDemo(gc: CanvasRenderingContext2D) {
 
 let frame = 0;
 let lastTime = 0;
-let fps = 60;
+let fps = 60.0;
 
 function fpsDemo(gc: CanvasRenderingContext2D) {
   gc.font = "32pt sans-serif";
-  fps = 0.98 * fps + 0.02 * Math.round(1000 / (performance.now() - lastTime));
+  fps = 0.98 * fps + 0.02 * Math.round(1000.0 / (performance.now() - lastTime));
   gc.fillText(`${fps.toFixed(1)} ${frame++}`, 10, 50);
   lastTime = performance.now();
 }
