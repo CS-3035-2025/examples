@@ -11,8 +11,8 @@ export class SKTextfieldDemo extends SKTextfield {
     super(props);
 
     // force layout recalculation for this demo
-    this.calculateBasis();
-    this.doLayout();
+    //this.calculateBasis();
+    //this.doLayout();
   }
 
   handleMouseEvent(me: SKMouseEvent) {
