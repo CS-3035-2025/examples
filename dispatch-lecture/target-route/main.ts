@@ -41,6 +41,10 @@ blueContainer.addChild(greenContainer);
 
 setSKDrawCallback((gc) => {
   gc.clearRect(0, 0, gc.canvas.width, gc.canvas.height);
+
+  blueContainer.measure();
+  blueContainer.layout(blueContainer.width, blueContainer.height);
+
   blueContainer.draw(gc); // draw from root
 });
 
