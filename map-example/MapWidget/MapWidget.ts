@@ -4,7 +4,10 @@ import { MapWidgetController } from "./MapWidgetController";
 import { MapWidgetModel } from "./MapWidgetModel";
 import { MapWidgetView } from "./MapWidgetView";
 
-// A Map Widget for SimpleKit that displays
+/** 
+ * A Map Widget for SimpleKit that displays an interactive map
+ * 
+*/ 
 export class MapWidget extends SKElement {
   private _model: MapWidgetModel;
   private _view: MapWidgetView;
@@ -41,10 +44,6 @@ export class MapWidget extends SKElement {
 
   public sendEvent(e: SKEvent, capture?: boolean): boolean {
     return super.sendEvent(e, capture);
-  }
-
-  public drawLabel(text: string, x: number, y: number) {
-    this._view.drawLabel(this.gc, text, x, y);
   }
 
   // Handle mouse events.

@@ -47,8 +47,7 @@ export class CheckBox extends SKElement {
   // Draw checkbox.
   public draw(gc: CanvasRenderingContext2D): void {
     super.draw(gc);
-    this._view.draw(gc);
-    
+    this._view.draw(gc); 
   }
 
   // Get/set check state of checkbox.

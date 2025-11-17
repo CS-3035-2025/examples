@@ -28,6 +28,19 @@ interface Property extends MapPoint{
     }
 }
 
+interface PropertyJSON{
+  "id":number,
+  "address": string,
+  "price": number,
+  "bedrooms": number,
+  "bathrooms": number,
+  "property_type": string,
+  "features": [],
+  "latitude": number,
+  "longitude": number,
+  "description": string
+}
+
 //create root container
 let root = new SKContainer();
 root.width = 800;
@@ -38,7 +51,7 @@ setSKRoot(root);
 
 //get JSON data for properties
 let propertiesForSale: Property[] = [];
-let jsonData:{}[] = [];
+let jsonData:PropertyJSON[] = [];
 
 try {
     //load JSON Data
@@ -46,7 +59,7 @@ try {
   jsonData = await response.json();
 
   //reformat json data
-  jsonData.forEach((record)=>{
+  jsonData.forEach((rec)=>{
         let prop: Property = {
           latitude: 0,
           longitude: 0,
@@ -62,17 +75,16 @@ try {
             description: "",
           }
         };
-        
-        prop.latitude = record['latitude'];
-        prop.longitude = record['longitude'];
-        prop.data.address = record['address'];
-        prop.data.description = record["description"];
-        prop.data.features = record["features"];
-        prop.data.property_type = record["property_type"];
-        prop.data.bathrooms = record["bathrooms"];
-        prop.data.bedrooms = record["bedrooms"];
-        prop.data.id = record["id"];
-        prop.data.price = record["price"];
+        prop.latitude = rec.latitude;
+        prop.longitude = rec.longitude;
+        prop.data.address = rec.address;
+        prop.data.description = rec.description;
+        prop.data.features = rec.features;
+        prop.data.property_type = rec.property_type;
+        prop.data.bathrooms = rec.bathrooms;
+        prop.data.bedrooms = rec.bedrooms;
+        prop.data.id = rec.id;
+        prop.data.price = rec.price;
 
         prop.dataDisplay = "";
 
@@ -88,6 +100,7 @@ let map = new MapWidget(propertiesForSale, {width: 800, height: 400});
 map.border = "black";
 map.drawMapFeatureFunctions.push(drawStJohnRiver);
 
+//add listener for hovering over map points
 map.addEventListener("point-hover", (e:SKEvent)=>{
   let me = e as SKMapEvent;
   let p = me.data as Property;
@@ -99,6 +112,7 @@ map.addEventListener("point-hover", (e:SKEvent)=>{
   p.dataDisplay = `${CADDollar.format(p.data.price)}`;
 });
 
+//create listener for clicking map points
 map.addEventListener("point-click", (e:SKEvent)=>{
   let me = e as SKMapEvent;
   let p = me.data as Property;
@@ -113,8 +127,6 @@ map.addEventListener("point-click", (e:SKEvent)=>{
 
 root.addChild(map);
 startSimpleKit();
-
-
 
 // Function to draw a river path on the canvas with scaling based on canvas size
 function drawStJohnRiver(
