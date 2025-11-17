@@ -1,18 +1,12 @@
-// Define the property interface based on JSON structure
-export interface MapPoint {
-    latitude: number;
-    longitude: number;
-    data: {};
-    dataDisplay: string;
-}
+import { MapPoint } from "./MapWidget";
 
 export class MapWidgetModel {
-  private _points: MapPoint[]; //points to be drawn on the map
+  private _points: MapPoint[] = []; //points to be drawn on the map
 
-  private _minLon: number;
-  private _maxLon: number;
-  private _minLat: number;
-  private _maxLat: number;
+  private _minLon: number = 0;
+  private _maxLon: number = 0;
+  private _minLat: number = 0;
+  private _maxLat: number = 0;
 
   constructor(points: MapPoint[]) {
     this.points = points;

@@ -1,18 +1,18 @@
-import { SKEvent, SKMouseEvent } from "../simplekit/src/imperative-mode";
 import {
   startSimpleKit,
   SKContainer,
   Layout,
   setSKRoot, 
   SKButton,
-  setSKEventListener
+  setSKEventListener,
+  SKEvent,
 } from "../simplekit/src/imperative-mode";
 
 import { 
+    MapWidget, 
     MapPoint,
-    MapWidget,
-    MapWidgetModel
- } from "./MapWidget";
+    SKMapEvent
+  } from "./MapWidget";
 
 //inteface for storing data on properties
 interface Property extends MapPoint{
@@ -28,11 +28,93 @@ interface Property extends MapPoint{
     }
 }
 
-function calculateDistance(x1: number, y1: number, x2: number, y2: number): number {
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    return Math.sqrt(dx * dx + dy * dy);
+//create root container
+let root = new SKContainer();
+root.width = 800;
+root.height = 600;
+root.layoutMethod = new Layout.CentredLayout();
+
+setSKRoot(root);
+
+//get JSON data for properties
+let propertiesForSale: Property[] = [];
+let jsonData:{}[] = [];
+
+try {
+    //load JSON Data
+  const response = await fetch("fredericton_properties.json");
+  jsonData = await response.json();
+
+  //reformat json data
+  jsonData.forEach((record)=>{
+        let prop: Property = {
+          latitude: 0,
+          longitude: 0,
+          dataDisplay: "",
+          data: {
+            id: -1,
+            address: "",
+            price: -1,
+            bedrooms: -1,
+            bathrooms: -1,
+            property_type: "",
+            features: [],
+            description: "",
+          }
+        };
+        
+        prop.latitude = record['latitude'];
+        prop.longitude = record['longitude'];
+        prop.data.address = record['address'];
+        prop.data.description = record["description"];
+        prop.data.features = record["features"];
+        prop.data.property_type = record["property_type"];
+        prop.data.bathrooms = record["bathrooms"];
+        prop.data.bedrooms = record["bedrooms"];
+        prop.data.id = record["id"];
+        prop.data.price = record["price"];
+
+        prop.dataDisplay = "";
+
+        propertiesForSale.push(prop);
+  });
+  
+} catch (error) {
+  console.error("Error loading properties:", error);
 }
+
+//create MapWidget
+let map = new MapWidget(propertiesForSale, {width: 800, height: 400});
+map.border = "black";
+map.drawMapFeatureFunctions.push(drawStJohnRiver);
+
+map.addEventListener("point-hover", (e:SKEvent)=>{
+  let me = e as SKMapEvent;
+  let p = me.data as Property;
+  // Format the price above to USD using the locale, style, and currency.
+  let CADDollar = new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD",
+  });
+  p.dataDisplay = `${CADDollar.format(p.data.price)}`;
+});
+
+map.addEventListener("point-click", (e:SKEvent)=>{
+  let me = e as SKMapEvent;
+  let p = me.data as Property;
+  // Format the price above to USD using the locale, style, and currency.
+  let CADDollar = new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD",
+  });
+  console.log(p);
+  console.log(`Clicked property at ${p.data.address} priced at ${CADDollar.format(p.data.price)}`); 
+});
+
+root.addChild(map);
+startSimpleKit();
+
+
 
 // Function to draw a river path on the canvas with scaling based on canvas size
 function drawStJohnRiver(
@@ -90,114 +172,3 @@ function drawStJohnRiver(
   gc.stroke();
   gc.restore();
 }
-
-//create root container
-let root = new SKContainer();
-root.width = 800;
-root.height = 600;
-root.layoutMethod = new Layout.CentredLayout();
-
-setSKRoot(root);
-
-//demonstrating a callback when interacting with feature on map
-function dataDisplayCallBack(data:string)
-{
-    console.log(data);
-}
-
-//get JSON data for properties
-let propertiesForSale: Property[] = [];
-let jsonData:{}[] = [];
-
-try {
-    //load JSON Data
-  const response = await fetch("fredericton_properties.json");
-  jsonData = await response.json();
-
-  //reformat json data
-  jsonData.forEach((record)=>{
-        let prop: Property = {
-          latitude: 0,
-          longitude: 0,
-          dataDisplay: "",
-          data: {
-            id: -1,
-            address: "",
-            price: -1,
-            bedrooms: -1,
-            bathrooms: -1,
-            property_type: "",
-            features: [],
-            description: "",
-          }
-        };
-        
-        prop.latitude = record['latitude'];
-        prop.longitude = record['longitude'];
-        prop.data.address = record['address'];
-        prop.data.description = record["description"];
-        prop.data.features = record["features"];
-        prop.data.property_type = record["property_type"];
-        prop.data.bathrooms = record["bathrooms"];
-        prop.data.bedrooms = record["bedrooms"];
-        prop.data.id = record["id"];
-        prop.data.price = record["price"];
-
-        prop.dataDisplay = "";
-
-        propertiesForSale.push(prop);
-  });
-  
-} catch (error) {
-  console.error("Error loading properties:", error);
-}
-
-//create MapWidget
-let map = new MapWidget(propertiesForSale, {width: 800, height: 400});
-map.border = "black";
-map.drawMapFeatureFunctions.push(drawStJohnRiver);
-
-//adding a handler for the map
-map.addMapEventHandler(
-    function(e:SKEvent, map:MapWidget, model:MapWidgetModel)
-    {
-        if (e.type === "mousemove")
-        {
-            let mouseEvent = e as SKMouseEvent;
-            
-            model.points.forEach((p) => {
-                    const { x, y } = model.latLonToCanvas(
-                        p.latitude,
-                        p.longitude,
-                        map.width,
-                        map.height
-                    );
-                    // considered a hit if less than 5 pixels away
-                    if (
-                      calculateDistance(
-                        map.x + x,
-                        map.y + y,
-                        mouseEvent.x,
-                        mouseEvent.y
-                      ) <= 5
-                    ) {
-                      // Format the price above to USD using the locale, style, and currency.
-                      let CADDollar = new Intl.NumberFormat("en-CA", {
-                        style: "currency",
-                        currency: "CAD",
-                      });
-                      //demonstrating displaying to the map
-                      p.dataDisplay = `${CADDollar.format(p.data['price'])}`;
-                    
-                      //demonstrating call to any function
-                      dataDisplayCallBack(p.data);
-                    } else {
-                      p.dataDisplay = "";
-                    }
-            });
-        }
-    }
-);
-
-root.addChild(map);
-startSimpleKit();

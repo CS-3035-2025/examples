@@ -1,13 +1,11 @@
-import { MapWidget, MapWidgetModel } from ".";
+import { MapWidget, MapPoint } from ".";
+import { MapWidgetModel } from "./MapWidgetModel";
 
 export class MapWidgetView {
   private _map: MapWidget;
   private _model: MapWidgetModel;
 
-  constructor(
-    map: MapWidget,
-    model: MapWidgetModel
-  ) {
+  constructor(map: MapWidget, model: MapWidgetModel) {
     this._model = model;
     this._map = map;
   }
@@ -18,13 +16,19 @@ export class MapWidgetView {
       x: number,
       y: number,
       width: number | undefined,
-      height: number | undefined    
+      height: number | undefined
     ) => void
   > = [];
 
   // Function to draw a red circle at a given latitude and longitude
   // todo: provide properties for drawing of markers to allow styling
-  public drawMarker(gc: CanvasRenderingContext2D, lat: number, lon: number, displayData: string, data:{}) {
+  public drawMarker(
+    gc: CanvasRenderingContext2D,
+    lat: number,
+    lon: number,
+    displayData: string,
+    data: {}
+  ) {
     const { x, y } = this._model.latLonToCanvas(
       lat,
       lon,
@@ -41,7 +45,7 @@ export class MapWidgetView {
     gc.closePath();
     gc.fillStyle = "black";
 
-    gc.fillText(displayData, x-10, y-10);
+    gc.fillText(displayData, x - 10, y - 10);
 
     gc.restore();
   }
@@ -51,7 +55,12 @@ export class MapWidgetView {
     gc.save();
     if (this._map.fill!) {
       gc.fillStyle = this._map.fill;
-      gc.fillRect(this._map.x!, this._map.y!, this._map.width!, this._map.height!);
+      gc.fillRect(
+        this._map.x!,
+        this._map.y!,
+        this._map.width!,
+        this._map.height!
+      );
     }
 
     //call any map drawing functions to display map features
@@ -61,16 +70,24 @@ export class MapWidgetView {
 
     // Draw each marker on the map
 
-    this._model.points.forEach((property) => {
+    this._model.points.forEach((property: MapPoint) => {
       const { latitude, longitude } = property;
-      this.drawMarker(gc, latitude, longitude, property.dataDisplay, property.data);
+      this.drawMarker(
+        gc,
+        latitude,
+        longitude,
+        property.dataDisplay,
+        property.data
+      );
     });
 
     //draw the border if there is one
     if (this._map.border) {
       gc.strokeStyle = this._map.border;
       gc.lineWidth = 1;
-      gc.strokeRect(this._map.x, this._map.y, this._map.widthBasis, this._map.heightBasis);
+      let w = this._map.width || 0;
+      let h = this._map.height || 0;
+      gc.strokeRect(this._map.x, this._map.y, w, h);
     }
     gc.restore();
   }

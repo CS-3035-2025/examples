@@ -3,12 +3,14 @@ import {
     setSKRoot,
     SKContainer,
     Layout,
+    Settings
 } from "../../simplekit/src/imperative-mode";
 
 const panelWidth = 500;
 const panelHeight = 220;
 
-
+Settings.debugLayout = true;
+Settings.debug = true;
 // Creating the root element with a grey background. No layout has been set, default is fixed
 const root = new SKContainer();
 root.fill = "lightgrey";

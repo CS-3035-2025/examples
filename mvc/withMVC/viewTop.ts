@@ -9,7 +9,6 @@ import { Subscriber } from "./subscriber";
 export class ViewTop extends SKContainer implements Subscriber{
 
     private _model: Model;
-
     
     constructor(props: SKElementProps, model: Model){
         super(props); // Super call since we extend SKContainer
@@ -20,7 +19,6 @@ export class ViewTop extends SKContainer implements Subscriber{
     set model(m: Model){
         this._model = m;
     }
-    
 
     // update() from Subscriber
     // Function creates squares based on model.count

@@ -1,7 +1,7 @@
 import { SKElement } from "../../simplekit/src/widget/";
 import { SKEvent, SKMouseEvent } from "../../simplekit/src/events";
 import { MapWidgetController } from "./MapWidgetController";
-import { MapWidgetModel, MapPoint } from "./MapWidgetModel";
+import { MapWidgetModel } from "./MapWidgetModel";
 import { MapWidgetView } from "./MapWidgetView";
 
 // A Map Widget for SimpleKit that displays
@@ -39,10 +39,21 @@ export class MapWidget extends SKElement {
     this._view.draw(gc);
   }
 
-    handleMouseEvent(me: SKMouseEvent):boolean {
-        this._controller.runHandlers(me);
-        return true;
-    }
+  public sendEvent(e: SKEvent, capture?: boolean): boolean {
+    return super.sendEvent(e, capture);
+  }
+
+  public drawLabel(text: string, x: number, y: number) {
+    this._view.drawLabel(this.gc, text, x, y);
+  }
+
+  // Handle mouse events.
+  handleMouseEvent(me: SKMouseEvent): boolean {
+    this._controller.handleMouseEvent(me);
+    //console.log(`MapWidget received mouse event: ${me.type} at (${me.x}, ${me.y})`);
+    return false;
+  }
+
   public get drawMapFeatureFunctions(): Array<
     (
       gc: CanvasRenderingContext2D,
@@ -56,7 +67,16 @@ export class MapWidget extends SKElement {
     return this._view.drawMapFeatureFunctions;
   }
 
-  public addMapEventHandler(func: (SKEvent, MapWidget, MapWidgetModel) => void) {
-        this._controller.eventHandlers.push(func);
-  }
+  // public addMapEventHandler(func: (SKEvent, MapWidget, MapWidgetModel) => void) {
+  //       this._controller.eventHandlers.push(func);
+  // }
+}
+
+
+// Define the property interface based on JSON structure
+export interface MapPoint {
+    latitude: number;
+    longitude: number;
+    data: {};
+    dataDisplay: string;
 }
