@@ -33,6 +33,12 @@ greenContainer.addChild(buttonA);
 
 setSKDrawCallback((gc) => {
   gc.clearRect(0, 0, gc.canvas.width, gc.canvas.height);
+
+  buttonA.measure();
+  buttonA.layout(buttonA.width, buttonA.height);
+  buttonB.measure();
+  buttonB.layout(buttonB.width, buttonB.height);
+
   blueContainer.draw(gc);
 });
 

@@ -48,6 +48,10 @@ root.addChild(textfield2);
 
 setSKDrawCallback((gc) => {
   gc.clearRect(0, 0, gc.canvas.width, gc.canvas.height);
+
+  root.measure();
+  root.layout(root.width, root.height);
+
   root.draw(gc); // draw from root
 });
 

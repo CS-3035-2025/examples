@@ -30,6 +30,10 @@ setSKEventListener((e) => {
 
 setSKDrawCallback((gc) => {
   gc.clearRect(0, 0, gc.canvas.width, gc.canvas.height);
+
+  button.measure();
+  button.layout(button.width, button.height);
+
   button.draw(gc);
 });
 
