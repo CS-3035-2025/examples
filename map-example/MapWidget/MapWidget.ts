@@ -65,12 +65,7 @@ export class MapWidget extends SKElement {
   > {
     return this._view.drawMapFeatureFunctions;
   }
-
-  // public addMapEventHandler(func: (SKEvent, MapWidget, MapWidgetModel) => void) {
-  //       this._controller.eventHandlers.push(func);
-  // }
 }
-
 
 // Define the property interface based on JSON structure
 export interface MapPoint {
