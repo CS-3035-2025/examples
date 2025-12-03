@@ -31,18 +31,11 @@ root.addChild(interfaceContainer);
 root.layoutMethod = new Layout.CentredLayout();
 interfaceContainer.layoutMethod = new Layout.WrapRowLayout();
 
-
 // Create a label
 var label = new SKLabel({ text: "Hello World!" });
 label.font = "30px Arial";
 
-
 interfaceContainer.addChild(label);
-
-
-
-// Adding the label element as a child of root
-
 
 //create a container for the checkboxes
 const checkboxContainer = new SKContainer();
