@@ -27,7 +27,9 @@ export class MapWidgetController {
     this._model = model;
   }
 
-  handleMouseEvent(me: SKMouseEvent) {      
+  handleMouseEvent(me: SKMouseEvent) {  
+      me.x -= this._map.absoluteX;
+      me.y -= this._map.absoluteY; 
       this._model.points.forEach((p) => {
             const { x, y } = this._model.latLonToCanvas(
                 p.latitude,

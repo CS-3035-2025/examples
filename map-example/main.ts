@@ -3,9 +3,9 @@ import {
   SKContainer,
   Layout,
   setSKRoot, 
-  SKButton,
-  setSKEventListener,
   SKEvent,
+  SKLabel,
+  Settings
 } from "../simplekit/src/imperative-mode";
 
 import { 
@@ -13,7 +13,7 @@ import {
     MapPoint,
     SKMapEvent
   } from "./MapWidget";
-
+Settings.debug = false;
 //inteface for storing data on properties
 interface Property extends MapPoint{
     data: {
@@ -43,7 +43,7 @@ interface PropertyJSON{
 
 //create root container
 let root = new SKContainer();
-root.width = 800;
+root.width = 1000;
 root.height = 600;
 root.layoutMethod = new Layout.CentredLayout();
 
@@ -110,6 +110,7 @@ map.addEventListener("point-hover", (e:SKEvent)=>{
     currency: "CAD",
   });
   p.dataDisplay = `${CADDollar.format(p.data.price)}`;
+  displayLabel.text = `${CADDollar.format(p.data.price)}`;
 });
 
 //create listener for clicking map points
@@ -121,11 +122,30 @@ map.addEventListener("point-click", (e:SKEvent)=>{
     style: "currency",
     currency: "CAD",
   });
-  console.log(p);
   console.log(`Clicked property at ${p.data.address} priced at ${CADDollar.format(p.data.price)}`); 
 });
+let mapContainer:SKContainer = new SKContainer();
+mapContainer.width = 800;
+mapContainer.height = 400;
+mapContainer.layoutMethod = new Layout.CentredLayout();
+mapContainer.addChild(map);
 
-root.addChild(map);
+let displayContainer:SKContainer = new SKContainer();
+displayContainer.width = 200;
+displayContainer.height = 400;
+displayContainer.layoutMethod = new Layout.WrapRowLayout();
+
+let displayLabel:SKLabel = new SKLabel({text: "Hover over a property to see the price here."});
+displayContainer.addChild(displayLabel);
+
+let interfaceContainer:SKContainer = new SKContainer();
+interfaceContainer.width = 1000;
+interfaceContainer.height = 600;
+interfaceContainer.layoutMethod = new Layout.WrapRowLayout();
+interfaceContainer.addChild(mapContainer);
+interfaceContainer.addChild(displayContainer);
+
+root.addChild(interfaceContainer);
 startSimpleKit();
 
 // Function to draw a river path on the canvas with scaling based on canvas size
